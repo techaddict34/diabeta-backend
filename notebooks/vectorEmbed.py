@@ -1,0 +1,19 @@
+import os
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+
+processed_dir = "data/processed_texts/" # Take all the chunks from processed_texts folder to do the embedding process
+
+def build_vector_db():
+    texts = [] # Make a list to collect all the chunked texts
+
+    for file in os.listdir(processed_dir):
+        with open(os.path.join(processed_dir, file), "r") as f: # Join all the files from processed_dir to read and gather them to list (texts)
+            texts.append(f.read())
+
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2") # Prepare the model for the embedding process
+    database = FAISS.from_texts(texts, embedding=embeddings) # FAISS (Facebook AI Similarity Search) all of the texts that have been embedded and store as variable database
+    database.save_local("vector_db") # Store the FAISS vector database locally so future runs can load it quickly (vector_db is the folder that we will store the db locally in)
+
+if __name__ == "__main__":
+    build_vector_db()
