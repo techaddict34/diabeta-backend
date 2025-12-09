@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 # import functions that will be used directly
-from ragQuery import ask_question
-from riskScreening import calculate_risk
+from notebooks.ragQuery import ask_question
+from notebooks.riskScreening import calculate_risk
 
 app = FastAPI()
 
