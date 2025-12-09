@@ -6,3 +6,6 @@ streamlit
 langchain-community
 dotenv
 langchain-text-splitters
+langchain-core
+langchain-openai
+sentence-transformers

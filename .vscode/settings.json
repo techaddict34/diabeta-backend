@@ -1,0 +1,9 @@
+{
+    "python.pythonPath": "/Users/kellysetiawan/langchain-project/.venv/bin/python",
+    "python.analysis.extraPaths": [
+        "/Users/kellysetiawan/langchain-project/.venv/lib/python3.11/site-packages"
+    ],
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingImports": "none"
+    }
+}
