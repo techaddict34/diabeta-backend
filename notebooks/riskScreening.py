@@ -16,18 +16,3 @@ def calculate_risk(age, bmi, family_history, symptoms_count):
         return "Moderate Risk"
     else:
         return "High Risk — please take a glucose test"
-
-if __name__ == "__main__":
-    print("Here are the list of the symptoms:")
-    print("- Feeling very thristy (polydipsia)")
-    print("- Feeling very hungry (polyphagia)")
-    print("- Urinating often, especially at night (polyuria)")
-    print("- Extreme fatigue") 
-    print("- Blurred vision")
-    print("- Frequent infections")
-    print("- Unexplained weight loss")
-    print("- Slow-healing sores or cuts")
-    print("- Numbness or tingling in the hands or feet")
-    print("- Very dry skin")
-    symptoms_count = int(input("Out of all the symptoms listed above, write the number of symptoms you have experienced: "))
-    print(calculate_risk(45, 30, "Parent", symptoms_count))
