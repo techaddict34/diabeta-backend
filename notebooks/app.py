@@ -1,11 +1,13 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+import os
 
 # import functions that will be used directly
 from notebooks.ragQuery import ask_question
 from notebooks.riskScreening import calculate_risk
 
 app = FastAPI()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Models for incoming requests
 class ChatQuery(BaseModel):
