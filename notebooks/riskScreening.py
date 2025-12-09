@@ -8,7 +8,7 @@ def calculate_risk(age, bmi, family_history, symptoms_count):
     if family_history.lower() in ["parent", "sibling"]:
         risk_score += 1
     if symptoms_count >= 2:
-        score += 2
+        risk_score += 2
     
     if risk_score <= 1:
         return "Low Risk"
