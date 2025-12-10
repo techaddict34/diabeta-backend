@@ -1,11 +1,7 @@
-langchain
-faiss-cpu
+langchain==0.0.267
+openai==0.28.1
 python-dotenv
-openai
-streamlit
-langchain-community
-dotenv
-langchain-text-splitters
-langchain-core
-langchain-openai
+tiktoken
 sentence-transformers
+faiss-cpu
+pypdf

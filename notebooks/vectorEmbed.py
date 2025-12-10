@@ -1,6 +1,7 @@
 import os
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.vectorstores import FAISS
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.vectorstores import FAISS
+
 
 processed_dir = "data/processed_texts/" # Take all the chunks from processed_texts folder to do the embedding process
 
