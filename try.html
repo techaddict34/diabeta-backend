@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes AI Demo</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; background-color: #f4f4f9; }
+        h1, h2 { color: #333; }
+        
+        /* Container Styling */
+        .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        
+        /* Input Styling */
+        input, select { padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; width: 100%; box-sizing: border-box; }
+        
+        /* Button Styling */
+        button { padding: 10px 20px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; width: 100%; margin-top: 10px; font-size: 1rem; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; }
+
+        /* Results Styling */
+        .box { border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-top: 20px; background: #fff; }
+        .citation { background: #eef; padding: 10px; margin-top: 5px; border-left: 4px solid #007bff; font-size: 0.9em; }
+        
+        /* Grid for Risk Inputs */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        /* Risk Result Colors */
+        .risk-high { color: #d9534f; font-weight: bold; font-size: 1.2em; }
+        .risk-low { color: #5cb85c; font-weight: bold; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h1>🏥 Diabetes AI Assistant</h1>
+        <div id="status" style="color: gray; font-size: 0.9em;">Server Status: Checking...</div>
+    </div>
+
+    <div class="container">
+        <h2>💬 Ask the Guidelines</h2>
+        <input type="text" id="question" placeholder="e.g., What is the BMI cutoff for Asian populations?" />
+        <button id="askBtn" onclick="askBackend()">Ask Groq AI</button>
+
+        <div id="chatResult" style="display: none;">
+            <div class="box">
+                <strong>Answer:</strong>
+                <p id="answerText"></p>
+            </div>
+            <div id="citationsArea"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>⚠️ Risk Screening Calculator</h2>
+        <div class="grid">
+            <div>
+                <label>Age</label>
+                <input type="number" id="age" placeholder="e.g. 45">
+            </div>
+            <div>
+                <label>BMI</label>
+                <input type="number" id="bmi" step="0.1" placeholder="e.g. 24.5">
+            </div>
+            <div>
+                <label>Family History</label>
+                <select id="family">
+                    <option value="no">No History</option>
+                    <option value="yes">Yes (Parents/Siblings)</option>
+                </select>
+            </div>
+            <div>
+                <label>Symptoms Count</label>
+                <input type="number" id="symptoms" placeholder="e.g. 2">
+            </div>
+        </div>
+        <button onclick="calculateRisk()" style="background-color: #28a745;">Calculate Risk</button>
+
+        <div id="riskResult" class="box" style="display: none; text-align: center;">
+            Risk Level: <span id="riskValue"></span>
+        </div>
+    </div>
+
+    <script>
+        // 1. Check Server Status
+        fetch("http://127.0.0.1:8000/")
+            .then(res => res.json())
+            .then(data => document.getElementById("status").innerText = "✅ Server Online")
+            .catch(err => document.getElementById("status").innerHTML = "❌ <span style='color:red'>Server Offline</span>");
+
+        // 2. Chatbot Logic
+        async function askBackend() {
+            const question = document.getElementById("question").value;
+            const btn = document.getElementById("askBtn");
+            const resultArea = document.getElementById("chatResult");
+            
+            if (!question) return alert("Please type a question!");
+
+            btn.disabled = true;
+            btn.innerText = "Thinking...";
+            resultArea.style.display = "none";
+
+            try {
+                const response = await fetch("http://127.0.0.1:8000/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ question: question })
+                });
+
+                const data = await response.json();
+
+                document.getElementById("answerText").innerText = data.answer;
+                
+                // Citations
+                const citationsArea = document.getElementById("citationsArea");
+                if (data.citations && data.citations.length > 0) {
+                    let html = "<h4>📚 Sources:</h4>";
+                    data.citations.forEach(cit => {
+                        html += `<div class="citation"><strong>${cit.title}</strong> (p. ${cit.page})<br><em>"${cit.snippet}"</em></div>`;
+                    });
+                    citationsArea.innerHTML = html;
+                } else {
+                    citationsArea.innerHTML = "";
+                }
+                
+                resultArea.style.display = "block";
+
+            } catch (error) {
+                alert("Error: " + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Ask Groq AI";
+            }
+        }
+
+        // 3. Risk Screening Logic
+        async function calculateRisk() {
+            const age = document.getElementById("age").value;
+            const bmi = document.getElementById("bmi").value;
+            const family = document.getElementById("family").value;
+            const symptoms = document.getElementById("symptoms").value;
+
+            if (!age || !bmi) return alert("Please fill in Age and BMI");
+
+            try {
+                const response = await fetch("http://127.0.0.1:8000/screen", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        age: parseInt(age),
+                        bmi: parseFloat(bmi),
+                        family_history: family,
+                        symptoms_count: parseInt(symptoms || 0)
+                    })
+                });
+
+                const data = await response.json();
+                
+                const resultBox = document.getElementById("riskResult");
+                const resultSpan = document.getElementById("riskValue");
+                
+                resultBox.style.display = "block";
+                resultSpan.innerText = data.risk;
+                
+                // Color coding
+                if (data.risk.toLowerCase().includes("high")) {
+                    resultSpan.className = "risk-high";
+                } else {
+                    resultSpan.className = "risk-low";
+                }
+
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
