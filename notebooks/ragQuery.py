@@ -3,34 +3,33 @@ from langchain.vectorstores import FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
 import os
-import streamlit as st  # Added to access Cloud Secrets
 from dotenv import load_dotenv
 
-load_dotenv() # Loads environment variables from .env (Local Mac)
+# Load Environment Variables
+# This reads from your .env file locally, or system variables in production/cloud
+load_dotenv()
+
+# Get API Key
+groq_api_key = os.getenv("GROQ_API_KEY")
+
+if not groq_api_key:
+    # Fail fast: If there is no key, stop the server immediately
+    raise ValueError("CRITICAL ERROR: GROQ_API_KEY not found. Please add it to your .env file.")
 
 # Prepare Embeddings
+# Downloads model if not cached
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
 # Load the Vector Database
+# Check if folder exists to avoid vague errors
+if not os.path.exists("vector_db"):
+    raise FileNotFoundError("The 'vector_db' folder was not found. Please run your ingestion script first.")
+
 database = FAISS.load_local("vector_db", embeddings) 
 
 # Create Retriever
-retriever = database.as_retriever(search_kwargs={"k": 3})
-
-# Robustly find the API Key and check Local .env
-groq_api_key = os.getenv("GROQ_API_KEY")
-
-# Check Streamlit Secrets (Cloud)
-if not groq_api_key:
-    try:
-        if "GROQ_API_KEY" in st.secrets:
-            groq_api_key = st.secrets["GROQ_API_KEY"]
-    except (FileNotFoundError, AttributeError):
-        pass # Ignore errors if not running inside Streamlit
-
-# Validation
-if not groq_api_key:
-    raise ValueError("CRITICAL ERROR: GROQ_API_KEY not found. Please set it in .env or Streamlit Secrets.")
+# Increased k to 8 to improve recall (filtering out bibliographies)
+retriever = database.as_retriever(search_kwargs={"k": 8})
 
 # Initialize LLM with Groq
 llm = ChatOpenAI(
@@ -48,13 +47,9 @@ qna_chain = RetrievalQA.from_chain_type(
 )
 
 def ask_question(q):
+    """
+    This function is called by app.py (FastAPI).
+    It returns the raw tuple: (Answer String, List of Source Documents)
+    """
     ans = qna_chain({"query": q}) 
     return ans["result"], ans["source_documents"]
-
-if __name__ == "__main__":
-    # Test it locally
-    answer, sources = ask_question("Apa gejala awal Diabetes yang kamu rasakan?")
-    print(f"Answer: {answer}")
-    print("\nSumber:")
-    for src in sources:
-        print(src.metadata)
