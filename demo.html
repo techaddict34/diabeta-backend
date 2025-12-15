@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes AI Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body { 
+            background: #f8f9fb; 
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        
+        h1, h2, h3 { 
+            color: #1e293b; 
+            margin-top: 0; 
+        }
+        
+        p { 
+            color: #6b7280; 
+        }
+        
+        /* Header Section */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #71a5de;
+            margin-bottom: 10px;
+        }
+
+        #status {
+            color: #6b7280;
+            font-size: 0.9em;
+        }
+        
+        /* Container Styling */
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .container h2 {
+            color: #1e293b;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .container h3 {
+            color: #1e293b;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .container p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* Input Styling */
+        input, select { 
+            padding: 14px 20px; 
+            margin: 5px 0; 
+            border: 1px solid #e1ecf7; 
+            border-radius: 12px; 
+            width: 100%; 
+            box-sizing: border-box;
+            font-size: 14px;
+            background: #f8f9fb;
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #83b0e1;
+            background: white;
+        }
+        
+        /* Button Styling */
+        button { 
+            padding: 14px 30px; 
+            cursor: pointer; 
+            background: #83b0e1; 
+            color: white; 
+            border: none; 
+            border-radius: 12px; 
+            width: 100%; 
+            margin-top: 10px; 
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        button:hover { 
+            background: #71a5de; 
+        }
+        
+        button:disabled { 
+            background: #d1d5db;
+            cursor: not-allowed;
+        }
+
+        /* Specific Button Colors */
+        .btn-gpt { 
+            background: linear-gradient(135deg, #83b0e1, #71a5de);
+            width: auto; 
+            display: inline-block; 
+            text-decoration: none;
+            padding: 14px 30px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .btn-gpt:hover { 
+            background: linear-gradient(135deg, #71a5de, #5a8fd4);
+        }
+        
+        .btn-risk { 
+            background: #83b0e1;
+        }
+
+        .btn-risk:hover {
+            background: #71a5de;
+        }
+
+        /* Results Styling */
+        .box { 
+            border: 1px solid #e1ecf7; 
+            padding: 20px; 
+            border-radius: 15px; 
+            margin-top: 20px; 
+            background: #f8f9fb;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .box strong {
+            color: #1e293b;
+            font-size: 16px;
+        }
+
+        .box p {
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+        
+        .citation { 
+            background: #e1ecf7; 
+            padding: 15px; 
+            margin-top: 10px; 
+            border-left: 4px solid #71a5de; 
+            font-size: 0.9em;
+            border-radius: 8px;
+            color: #1e293b;
+        }
+
+        .citation strong {
+            color: #71a5de;
+        }
+
+        .citation em {
+            color: #6b7280;
+        }
+        
+        /* Grid for Risk Inputs */
+        .grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .grid > div label {
+            display: block;
+            margin-bottom: 5px;
+            color: #1e293b;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* Risk Result Colors */
+        .risk-high { 
+            color: #dc2626; 
+            font-weight: bold; 
+            font-size: 1.2em; 
+        }
+        
+        .risk-low { 
+            color: #16a34a; 
+            font-weight: bold; 
+            font-size: 1.2em; 
+        }
+
+        /* Featured Container */
+        .featured-container {
+            background: linear-gradient(135deg, #83b0e1, #71a5de);
+            border: none;
+            color: white;
+        }
+
+        .featured-container h3,
+        .featured-container p {
+            color: white;
+        }
+
+        /* Status indicators */
+        .status-online {
+            color: #16a34a;
+            font-weight: 600;
+        }
+
+        .status-offline {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: 1rem 0.5rem;
+            }
+
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏥 Diabetes AI Assistant</h1>
+        <div id="status">Server Status: Checking...</div>
+    </div>
+
+    <div class="container" style="text-align: center;">
+        <h3>🚀 Try Diabeta AI (Advanced)</h3>
+        <p>Access our specialized Custom GPT directly on the ChatGPT platform for advanced analysis.</p>
+        <a href="https://chatgpt.com/g/g-692e9d4fdc94819191cbf85d001038fd-diabeta-ai" target="_blank">
+            <button class="btn-gpt">Open Diabeta AI ↗</button>
+        </a>
+    </div>
+
+    <div class="container">
+        <h2>💬 Ask the Guidelines</h2>
+        <p style="margin-bottom: 15px;">Get answers from diabetes management guidelines using our AI-powered system.</p>
+        <input type="text" id="question" placeholder="e.g., What is the BMI cutoff for Asian populations?" />
+        <button id="askBtn" onclick="askBackend()">Ask Our RAG</button>
+
+        <div id="chatResult" style="display: none;">
+            <div class="box">
+                <strong>Answer:</strong>
+                <p id="answerText"></p>
+            </div>
+            <div id="citationsArea"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>⚠️ Risk Screening Calculator</h2>
+        <p style="margin-bottom: 15px;">Calculate your diabetes risk based on key health factors.</p>
+        <div class="grid">
+            <div>
+                <label>Age</label>
+                <input type="number" id="age" placeholder="e.g. 45">
+            </div>
+            <div>
+                <label>BMI</label>
+                <input type="number" id="bmi" step="0.1" placeholder="e.g. 24.5">
+            </div>
+            <div>
+                <label>Family History</label>
+                <select id="family">
+                    <option value="no">No History</option>
+                    <option value="yes">Yes (Parents/Siblings)</option>
+                </select>
+            </div>
+            <div>
+                <label>Symptoms Count</label>
+                <input type="number" id="symptoms" placeholder="e.g. 2">
+            </div>
+        </div>
+        <button onclick="calculateRisk()" class="btn-risk">Calculate Risk</button>
+
+        <div id="riskResult" class="box" style="display: none; text-align: center;">
+            <strong>Risk Level:</strong> <span id="riskValue"></span>
+        </div>
+    </div>
+
+    <script>
+        // 1. Check Server Status
+        fetch("http://127.0.0.1:8000/")
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("status").innerHTML = "✅ <span class='status-online'>Server Online</span>";
+            })
+            .catch(err => {
+                document.getElementById("status").innerHTML = "❌ <span class='status-offline'>Server Offline</span>";
+            });
+
+        // 2. Chatbot Logic
+        async function askBackend() {
+            const question = document.getElementById("question").value;
+            const btn = document.getElementById("askBtn");
+            const resultArea = document.getElementById("chatResult");
+            
+            if (!question) return alert("Please type a question!");
+
+            btn.disabled = true;
+            btn.innerText = "Thinking...";
+            resultArea.style.display = "none";
+
+            try {
+                const response = await fetch("http://127.0.0.1:8000/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ question: question })
+                });
+
+                const data = await response.json();
+
+                document.getElementById("answerText").innerText = data.answer;
+                
+                // Citations
+                const citationsArea = document.getElementById("citationsArea");
+                if (data.citations && data.citations.length > 0) {
+                    let html = "<h4 style='margin-top: 20px; color: #1e293b;'>📚 Sources:</h4>";
+                    data.citations.forEach(cit => {
+                        html += `<div class="citation"><strong>${cit.title}</strong> (p. ${cit.page})<br><em>"${cit.snippet}"</em></div>`;
+                    });
+                    citationsArea.innerHTML = html;
+                } else {
+                    citationsArea.innerHTML = "";
+                }
+                
+                resultArea.style.display = "block";
+
+            } catch (error) {
+                alert("Error: " + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Ask Our RAG";
+            }
+        }
+
+        // 3. Risk Screening Logic
+        async function calculateRisk() {
+            const age = document.getElementById("age").value;
+            const bmi = document.getElementById("bmi").value;
+            const family = document.getElementById("family").value;
+            const symptoms = document.getElementById("symptoms").value;
+
+            if (!age || !bmi) return alert("Please fill in Age and BMI");
+
+            try {
+                const response = await fetch("http://127.0.0.1:8000/screen", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        age: parseInt(age),
+                        bmi: parseFloat(bmi),
+                        family_history: family,
+                        symptoms_count: parseInt(symptoms || 0)
+                    })
+                });
+
+                const data = await response.json();
+                
+                const resultBox = document.getElementById("riskResult");
+                const resultSpan = document.getElementById("riskValue");
+                
+                resultBox.style.display = "block";
+                resultSpan.innerText = data.risk;
+                
+                // Color coding
+                if (data.risk.toLowerCase().includes("high")) {
+                    resultSpan.className = "risk-high";
+                } else {
+                    resultSpan.className = "risk-low";
+                }
+
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
