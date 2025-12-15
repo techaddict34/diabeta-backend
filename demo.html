@@ -28,7 +28,6 @@
             color: #6b7280; 
         }
         
-        /* Header Section */
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -45,8 +44,7 @@
             color: #6b7280;
             font-size: 0.9em;
         }
-        
-        /* Container Styling */
+
         .container { 
             background: white; 
             padding: 30px; 
@@ -75,8 +73,7 @@
             font-size: 14px;
             line-height: 1.6;
         }
-        
-        /* Input Styling */
+
         input, select { 
             padding: 14px 20px; 
             margin: 5px 0; 
@@ -94,8 +91,7 @@
             border-color: #83b0e1;
             background: white;
         }
-        
-        /* Button Styling */
+   
         button { 
             padding: 14px 30px; 
             cursor: pointer; 
@@ -119,7 +115,6 @@
             cursor: not-allowed;
         }
 
-        /* Specific Button Colors */
         .btn-gpt { 
             background: linear-gradient(135deg, #83b0e1, #71a5de);
             width: auto; 
@@ -143,7 +138,6 @@
             background: #71a5de;
         }
 
-        /* Results Styling */
         .box { 
             border: 1px solid #e1ecf7; 
             padding: 20px; 
@@ -180,8 +174,7 @@
         .citation em {
             color: #6b7280;
         }
-        
-        /* Grid for Risk Inputs */
+
         .grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -197,7 +190,6 @@
             font-size: 14px;
         }
 
-        /* Risk Result Colors */
         .risk-high { 
             color: #dc2626; 
             font-weight: bold; 
@@ -210,7 +202,6 @@
             font-size: 1.2em; 
         }
 
-        /* Featured Container */
         .featured-container {
             background: linear-gradient(135deg, #83b0e1, #71a5de);
             border: none;
@@ -222,7 +213,6 @@
             color: white;
         }
 
-        /* Status indicators */
         .status-online {
             color: #16a34a;
             font-weight: 600;
@@ -233,7 +223,6 @@
             font-weight: 600;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .grid {
                 grid-template-columns: 1fr;
@@ -310,7 +299,7 @@
     </div>
 
     <script>
-        // 1. Check Server Status
+        // Check Server Status
         fetch("http://127.0.0.1:8000/")
             .then(res => res.json())
             .then(data => {
@@ -320,7 +309,7 @@
                 document.getElementById("status").innerHTML = "❌ <span class='status-offline'>Server Offline</span>";
             });
 
-        // 2. Chatbot Logic
+        // Chatbot Logic
         async function askBackend() {
             const question = document.getElementById("question").value;
             const btn = document.getElementById("askBtn");
@@ -365,7 +354,7 @@
             }
         }
 
-        // 3. Risk Screening Logic
+        // Risk Screening Logic
         async function calculateRisk() {
             const age = document.getElementById("age").value;
             const bmi = document.getElementById("bmi").value;
