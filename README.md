@@ -7,10 +7,10 @@ A **Retrieval-Augmented Generation (RAG)** assistant for Indonesian diabetes gui
 
 ---
 
-## : Features
+## 🚀 Features
 
 ### 1. Guideline Q&A (RAG)
-- Answers diabetes-related questions using **retrieved passages** from provided guideline PDFs.
+- Answers type 2 diabetes-related questions using **retrieved passages** from provided guideline PDFs.
 - Returns the generated answer along with **citations** (source document + page + snippet).
 - Supports **English and Bahasa Indonesia** outputs.
 
@@ -22,15 +22,18 @@ A **Retrieval-Augmented Generation (RAG)** assistant for Indonesian diabetes gui
   - symptom count
 - Outputs either **Low / Moderate / High risk** (English) or **Risiko Rendah / Sedang / Tinggi** (Indonesian).
 
+### 3. Custom Prompt-Engineered GPT Chatbot
+- Answers diabetes-related questions in general
+
 ---
 
-## How it works
+##  How it works
 
 ### RAG pipeline (end-to-end)
 Code files:
-- `notebooks/loadData.py` — loads guideline PDFs from `data/guidelines/` and splits them into text chunks
-- `notebooks/vectorEmbed.py` — embeds chunks and stores them in a local **FAISS** vector database at `vector_db/`
-- `notebooks/ragQuery.py` — loads FAISS, retrieves top-k relevant chunks, and asks an LLM to answer using the retrieved context
+- `notebooks/loadData.py`: loads guideline PDFs from `data/guidelines/` and splits them into text chunks
+- `notebooks/vectorEmbed.py`: embeds chunks and stores them in a local **FAISS** vector database at `vector_db/`
+- `notebooks/ragQuery.py`: loads FAISS, retrieves top-k relevant chunks, and asks an LLM to answer using the retrieved context
 
 The FastAPI server (`app.py`) will automatically build the pipeline **on startup** if `vector_db/` is missing.
 
@@ -59,54 +62,6 @@ The endpoint `POST /screen` calls `calculate_risk(...)` and returns the computed
   - Local FAISS vector index (generated)
 - `notebooks/`
   - `loadData.py`, `vectorEmbed.py`, `ragQuery.py`, `riskScreening.py`
-
----
-
-## API endpoints
-
-### `GET /`
-- Returns the single-page frontend (`frontend/index.html`).
-
-### `POST /chat`
-Request body:
-```json
-{
-  "question": "...",
-  "language": "en" 
-}
-```
-Response:
-```json
-{
-  "answer": "...",
-  "citations": [
-    {
-      "title": "...",
-      "page": "...",
-      "snippet": "...",
-      "url": "http://127.0.0.1:8000/static/<file>.pdf"
-    }
-  ]
-}
-```
-
-### `POST /screen`
-Request body:
-```json
-{
-  "age": 45,
-  "bmi": 26.2,
-  "family_history": "yes",
-  "symptoms_count": 2,
-  "language": "en"
-}
-```
-Response:
-```json
-{
-  "risk": "High Risk (please take a glucose test)"
-}
-```
 
 ---
 
@@ -186,7 +141,4 @@ docker run --rm -p 7860:7860 \
    - It is intentionally simple and not a clinical diagnostic tool.
 
 ---
-
-## License
-Add your license information here (or remove this section).
 
