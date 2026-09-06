@@ -143,4 +143,4 @@ docker run --rm -p 7860:7860 \
 
 ## 🔗 Links to Demo
 - Video: https://drive.google.com/file/d/1fbyIJCNMSc0xGx2Fu-lJQJzUd0y-szQe/view?usp=sharing
-- Live app: https://diabeta-ai-01bd8.containers.snapdeploy.app
+- Live app: https://diabeta-ai-01bd8.containers.snapdeploy.app (may take a few minutes to load)
