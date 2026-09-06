@@ -5,6 +5,9 @@ A **Retrieval-Augmented Generation (RAG)** assistant for Indonesian Type 2 Diabe
 > ⚠️ **Medical Disclaimer**
 > This tool is for **research and learning only**. It is **not clinically validated** and must **not** be used as medical advice, diagnosis, or treatment. For clinical decisions, consult a licensed healthcare professional.
 
+## 👩‍💻 My Role
+AI/ML Engineer: Built the RAG pipeline (PDF ingestion, chunking, embedding, FAISS retrieval, grounded bilingual prompting) and rule-based risk-screening calculator, and migrated LLM providers with zero impact to retrieval.
+
 ## 📚 Tech stack
 - **Backend:** Python 3.11, FastAPI, Uvicorn, Pydantic
 - **AI/RAG:** LangChain, FastEmbed, FAISS, Groq (gpt-oss-120b), OpenAI SDK, pypdf, huggingface_hub
