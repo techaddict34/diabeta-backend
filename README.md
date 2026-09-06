@@ -5,7 +5,11 @@ A **Retrieval-Augmented Generation (RAG)** assistant for Indonesian diabetes gui
 > ⚠️ **Medical Disclaimer**
 > This tool is for **research and learning only**. It is **not clinically validated** and must **not** be used as medical advice, diagnosis, or treatment. For clinical decisions, consult a licensed healthcare professional.
 
----
+## 📚 Tech stack
+- **Backend:** Python 3.11, FastAPI, Uvicorn, Pydantic
+- **AI/RAG:** LangChain, FastEmbed, FAISS, Groq (gpt-oss-120b), OpenAI SDK, pypdf, huggingface_hub
+- **Frontend:** HTML, CSS, JavaScript, Google Fonts
+- **Infra:** Docker, Git LFS, GitHub, SnapDeploy, Cloudflare
 
 ## 🚀 Features
 
@@ -25,7 +29,6 @@ A **Retrieval-Augmented Generation (RAG)** assistant for Indonesian diabetes gui
 ### 3. Custom Prompt-Engineered GPT Chatbot
 - Answers diabetes-related questions in general
 
----
 
 ##  How it works
 
@@ -43,7 +46,6 @@ Code file:
 
 The endpoint `POST /screen` calls `calculate_risk(...)` and returns the computed risk string.
 
----
 
 ## Project layout
 
@@ -63,7 +65,6 @@ The endpoint `POST /screen` calls `calculate_risk(...)` and returns the computed
 - `notebooks/`
   - `loadData.py`, `vectorEmbed.py`, `ragQuery.py`, `riskScreening.py`
 
----
 
 ## Setup
 
@@ -83,11 +84,10 @@ cd diabeta-backend
 pip install -r requirements.txt
 ```
 
----
 
 ## Running locally
 
-### Option A — Start the server (auto-build vector DB if needed)
+### Option A: Start the server (auto-build vector DB if needed)
 ```bash
 uvicorn app:app --reload --host 0.0.0.0 --port 7860
 ```
@@ -98,13 +98,12 @@ On first run, if `vector_db/` is missing, the server will execute:
 - `python notebooks/loadData.py`
 - `python notebooks/vectorEmbed.py`
 
-### Option B — Manually build the vector DB
+### Option B: Manually build the vector DB
 ```bash
 python notebooks/loadData.py
 python notebooks/vectorEmbed.py
 ```
 
----
 
 ## Docker
 
@@ -122,7 +121,6 @@ docker run --rm -p 7860:7860 \
   diabeta-backend
 ```
 
----
 
 ## Notes & gotchas
 
@@ -140,5 +138,6 @@ docker run --rm -p 7860:7860 \
 4. **Risk calculator is heuristic**
    - It is intentionally simple and not a clinical diagnostic tool.
 
----
-
+## 🔗 Links to Demo
+- Video: https://drive.google.com/file/d/1fbyIJCNMSc0xGx2Fu-lJQJzUd0y-szQe/view?usp=sharing
+- Live app: https://diabeta-ai-01bd8.containers.snapdeploy.app
