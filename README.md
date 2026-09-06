@@ -1,13 +1,13 @@
-# Diabeta Assistant (Diabetes RAG Screening)
+# ⚕️Diabeta AI (Diabetes RAG Screening)
 
-A **Retrieval-Augmented Generation (RAG)** assistant for Indonesian diabetes guideline Q&A plus a simple, rule-based **pre-diabetes / type 2 diabetes risk screening** calculator.
+A **Retrieval-Augmented Generation (RAG)** assistant for Indonesian diabetes guideline Q&A plus a simple, rule-based **pre-diabetes / Type 2 Diabetes risk screening** calculator.
 
 > ⚠️ **Medical Disclaimer**
 > This tool is for **research and learning only**. It is **not clinically validated** and must **not** be used as medical advice, diagnosis, or treatment. For clinical decisions, consult a licensed healthcare professional.
 
 ---
 
-## Features
+## : Features
 
 ### 1. Guideline Q&A (RAG)
 - Answers diabetes-related questions using **retrieved passages** from provided guideline PDFs.
